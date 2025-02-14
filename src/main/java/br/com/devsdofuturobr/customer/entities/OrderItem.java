@@ -28,12 +28,12 @@ public class OrderItem {
     private OrderItemId id;
 
     @ManyToOne
-    @MapsId("orderId")
+    @MapsId
     @JoinColumn(name = "order_id", nullable = false, insertable = false, updatable = false)
     private Order order;
 
     @ManyToOne
-    @MapsId("productId")
+    @MapsId
     @JoinColumn(name = "prod_id", nullable = false, insertable = false, updatable = false)
     private Product product;
 

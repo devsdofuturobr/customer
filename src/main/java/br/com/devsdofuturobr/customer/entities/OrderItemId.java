@@ -7,12 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Embeddable
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItemId implements java.io.Serializable {
+public class OrderItemId implements Serializable {
 
     @Column(name = "order_id")
     private Integer orderId;
