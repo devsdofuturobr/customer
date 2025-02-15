@@ -18,7 +18,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer create(Customer customer) {
-        if(customerRepository.findByEmail(customer.getEmail()).isPresent()){
+        if(customerRepository.existsByEmail(customer.getEmail())){
             log.info("this email already exists");
             throw new EmailAlreadyExistsException();
         }

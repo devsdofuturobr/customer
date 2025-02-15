@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/testdb
+    username: testuser
+    password: testpass
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: none  # Important! Flyway manages schema, so disable Hibernate auto-DDL
+    show-sql: true
+  flyway:
+    enabled: true  # Ensure Flyway is enabled in test profile
+    locations: classpath:db/migration  # Point to migration scripts

@@ -3,6 +3,7 @@ package br.com.devsdofuturobr.customer.controllers;
 import br.com.devsdofuturobr.customer.entities.Order;
 import br.com.devsdofuturobr.customer.services.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping(value = "/create/{customerId}")
+    @ResponseStatus(HttpStatus.CREATED)
     public Order create(@PathVariable(value = "customerId") Integer customerId){
         return orderService.create(customerId);
     }
