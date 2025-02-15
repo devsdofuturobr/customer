@@ -1,5 +1,6 @@
 package br.com.devsdofuturobr.customer.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -28,18 +29,21 @@ public class OrderItem {
     private OrderItemId id;
 
     @ManyToOne
-    @MapsId
+    @MapsId("orderId")  // Mapeia apenas o order_id
     @JoinColumn(name = "order_id", nullable = false, insertable = false, updatable = false)
+    @JsonBackReference
     private Order order;
 
     @ManyToOne
-    @MapsId
+    @MapsId("productId")  // Mapeia apenas o prod_id
     @JoinColumn(name = "prod_id", nullable = false, insertable = false, updatable = false)
+    @JsonBackReference
     private Product product;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @Column(name = "item_price", nullable = false, precision = 10, scale = 2)
+    @JsonBackReference
     private BigDecimal itemPrice;
 }

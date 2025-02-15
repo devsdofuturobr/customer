@@ -2,10 +2,7 @@ package br.com.devsdofuturobr.customer.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -21,4 +18,7 @@ public class OrderItemId implements Serializable {
 
     @Column(name = "order_item")
     private Integer orderItem;
+
+    @Column(name = "prod_id")
+    private Integer productId;  // Adicionar para refletir a chave estrangeira corretamente
 }
