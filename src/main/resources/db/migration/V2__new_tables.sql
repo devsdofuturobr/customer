@@ -18,7 +18,8 @@ CREATE TABLE order_items (
                              prod_id INT NOT NULL,
                              quantity INT NOT NULL,
                              item_price DECIMAL(10, 2) NOT NULL,
-                             PRIMARY KEY (order_id, order_item),
+                             item_price_total DECIMAL(10, 2) NOT NULL,
+                             UNIQUE KEY (order_id, order_item, prod_id),
                              FOREIGN KEY (order_id) REFERENCES orders(order_id),
                              FOREIGN KEY (prod_id) REFERENCES products(prod_id)
 );
