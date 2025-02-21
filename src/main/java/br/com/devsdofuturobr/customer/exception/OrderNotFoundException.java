@@ -1,12 +1,17 @@
 package br.com.devsdofuturobr.customer.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class OrderNotFoundException extends RuntimeException{
+public class OrderNotFoundException extends ResponseStatusException {
 
     public OrderNotFoundException(){
-        super("Order not found!");
+        super(HttpStatus.NOT_FOUND, "Order not found!");
+    }
+
+    @Override
+    public Throwable fillInStackTrace() {
+        // Return this instance without populating the stack trace
+        return this;
     }
 }

@@ -3,9 +3,12 @@ package br.com.devsdofuturobr.customer.services;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import br.com.devsdofuturobr.customer.dto.request.CustomerRequest;
+import br.com.devsdofuturobr.customer.dto.response.CustomerCompleteResponse;
 import br.com.devsdofuturobr.customer.entities.Customer;
 import br.com.devsdofuturobr.customer.exception.CustomerNotExistsException;
 import br.com.devsdofuturobr.customer.exception.EmailAlreadyExistsException;
+import br.com.devsdofuturobr.customer.mappers.CustomerMapper;
 import br.com.devsdofuturobr.customer.repositories.CustomerRepository;
 import br.com.devsdofuturobr.customer.services.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -27,11 +30,11 @@ class CustomerServiceImplTest {
 
     @Test
     void shouldSaveCustomerSuccessfully(){
-        Customer customer = buildCustomer();
+        var customerDTO = buildDTOCustomer();
+        var customerEntity = buildEntityCustomer();
+        when(customerRepository.save(any(Customer.class))).thenReturn(customerEntity);
 
-        when(customerRepository.save(any(Customer.class))).thenReturn(customer);
-
-        Customer savedCustomer = customerService.create(customer);
+        var savedCustomer = customerService.create(customerDTO);
 
         assertNotNull(savedCustomer);
         assertEquals("John Doe", savedCustomer.getName());
@@ -40,10 +43,10 @@ class CustomerServiceImplTest {
 
     @Test
     void shouldNotSaveCustomerIfEmailAlreadyExists(){
-        Customer customer = buildCustomer();
+        var customerDTO = buildDTOCustomer();
 
         when(customerRepository.existsByEmail(anyString())).thenReturn(true);
-        assertThrows(EmailAlreadyExistsException.class, () -> customerService.create(customer));
+        assertThrows(EmailAlreadyExistsException.class, () -> customerService.create(customerDTO));
         verify(customerRepository, never()).save(any(Customer.class));
     }
 
@@ -54,10 +57,10 @@ class CustomerServiceImplTest {
 
         when(customerRepository.findById(1)).thenReturn(Optional.of(customer));
 
-        Customer findCustomer = customerService.findById(1);
+        CustomerCompleteResponse findCustomer = CustomerMapper.toCompleteDTO(customerService.findById(1));
 
         assertNotNull(findCustomer);
-        assertEquals(1, findCustomer.getId());
+        assertEquals(1, findCustomer.id());
         verify(customerRepository, times(1)).findById(1);
 
     }
@@ -70,7 +73,20 @@ class CustomerServiceImplTest {
 
     }
 
-    private Customer buildCustomer(){
+    private CustomerRequest buildDTOCustomer(){
+        return new CustomerRequest(
+                "John Doe",
+                "123 Main Street",
+                "Los Angeles",
+                "CA",
+                "90001",
+                "USA",
+                "+1 555-1234",
+                "john.doe@example.com"
+        );
+    }
+    private Customer buildEntityCustomer(){
+
         return Customer.builder()
                 .name("John Doe")
                 .email("john.doe@example.com")
@@ -79,6 +95,7 @@ class CustomerServiceImplTest {
                 .city("Los Angeles")
                 .state("CA")
                 .zip("90001")
+                .country("USA")
                 .build();
     }
 }

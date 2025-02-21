@@ -3,10 +3,10 @@ package br.com.devsdofuturobr.customer.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public class CustomerNotExistsException extends ResponseStatusException {
+public class OrderItemDTOException extends ResponseStatusException {
 
-    public CustomerNotExistsException(){
-        super(HttpStatus.NOT_FOUND, "Sorry, but this customer not exists!");
+    public OrderItemDTOException(String text) {
+        super(HttpStatus.NOT_FOUND, text, null);
     }
 
     @Override

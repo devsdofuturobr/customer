@@ -5,6 +5,8 @@ import br.com.devsdofuturobr.customer.exception.ProductNotExistsException;
 import br.com.devsdofuturobr.customer.repositories.ProductRepository;
 import br.com.devsdofuturobr.customer.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +23,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     @Override

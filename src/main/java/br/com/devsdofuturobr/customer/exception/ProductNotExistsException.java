@@ -1,12 +1,17 @@
 package br.com.devsdofuturobr.customer.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ProductNotExistsException extends RuntimeException{
+public class ProductNotExistsException extends ResponseStatusException {
 
     public ProductNotExistsException(){
-        super("Product not exists");
+        super(HttpStatus.NOT_FOUND, "Product not exists");
+    }
+
+    @Override
+    public Throwable fillInStackTrace() {
+        // Return this instance without populating the stack trace
+        return this;
     }
 }

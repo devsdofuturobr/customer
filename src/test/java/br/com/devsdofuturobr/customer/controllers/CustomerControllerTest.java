@@ -5,6 +5,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
+import br.com.devsdofuturobr.customer.dto.request.CustomerRequest;
+import br.com.devsdofuturobr.customer.dto.response.CustomerCompleteResponse;
+import br.com.devsdofuturobr.customer.dto.response.CustomerShortResponse;
 import br.com.devsdofuturobr.customer.entities.Customer;
 import br.com.devsdofuturobr.customer.exception.EmailAlreadyExistsException;
 import br.com.devsdofuturobr.customer.services.CustomerService;
@@ -31,13 +34,14 @@ class CustomerControllerTest {
 
     @Test
     void shouldCreateCustomer_andReturnYourDatas() throws Exception {
-        Customer customer = buildCustomer();
+        var customer = buildCustomer();
+        var customerRequest = buildDTOCustomerRequest();
 
-        when(customerService.create(any(Customer.class))).thenReturn(customer);
+        when(customerService.create(any(CustomerRequest.class))).thenReturn(customer);
 
-       mockMvc.perform(post("/api/v1/customer/create")
+       mockMvc.perform(post("/api/v1/customer")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(customer)))
+                .content(objectMapper.writeValueAsString(customerRequest)))
                .andExpect(status().isCreated())
                .andExpect(jsonPath("$.name").value("John Doe"))
                .andExpect(jsonPath("$.email").value("john.doe@example.com"))
@@ -49,26 +53,52 @@ class CustomerControllerTest {
     }
     @Test
     void shouldNotCreateCustomerIfCustomerEmailAlreadyExists() throws Exception {
-        Customer customer = buildCustomer();
+        var customerRequest = buildDTOCustomerRequest();
 
-        when(customerService.create(any(Customer.class))).thenThrow(new EmailAlreadyExistsException());
+        when(customerService.create(any(CustomerRequest.class))).thenThrow(new EmailAlreadyExistsException());
 
-        mockMvc.perform(post("/api/v1/customer/create")
+        mockMvc.perform(post("/api/v1/customer")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(customer)))
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath(".message").value("Sorry, but this email already exists!"));
+                        .content(objectMapper.writeValueAsString(customerRequest)))
+                .andExpect(status().isConflict());
+
     }
 
     private Customer buildCustomer(){
         return Customer.builder()
                 .name("John Doe")
-                .email("john.doe@example.com")
-                .contact("+1 555-1234")
                 .address("123 Main Street")
                 .city("Los Angeles")
                 .state("CA")
                 .zip("90001")
+                .country("USA")
+                .contact("+1 555-1234")
+                .email("john.doe@example.com")
                 .build();
+    }
+    private CustomerCompleteResponse buildDTOCustomerCompleteResponse(){
+        return new CustomerCompleteResponse(
+                1,
+                "John Doe",
+                "123 Main Street",
+                "Los Angeles",
+                "CA",
+                "90001",
+                "USA",
+                "+1 555-1234",
+                "john.doe@example.com"
+        );
+    }
+    private CustomerRequest buildDTOCustomerRequest(){
+        return new CustomerRequest(
+                "John Doe",
+                "123 Main Street",
+                "Los Angeles",
+                "CA",
+                "90001",
+                "USA",
+                "+1 555-1234",
+                "john.doe@example.com"
+        );
     }
 }

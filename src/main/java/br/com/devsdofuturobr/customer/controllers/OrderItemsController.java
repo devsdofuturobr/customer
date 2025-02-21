@@ -1,8 +1,9 @@
 package br.com.devsdofuturobr.customer.controllers;
 
-import br.com.devsdofuturobr.customer.dto.OrderItemDTO;
+import br.com.devsdofuturobr.customer.dto.request.OrderItemRequest;
+import br.com.devsdofuturobr.customer.dto.response.OrderItemResponse;
 import br.com.devsdofuturobr.customer.entities.OrderItem;
-import br.com.devsdofuturobr.customer.entities.OrderItemId;
+import br.com.devsdofuturobr.customer.mappers.OrderItemMapper;
 import br.com.devsdofuturobr.customer.services.OrderItemsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,11 @@ public class OrderItemsController {
 
     private final OrderItemsService orderItemsService;
 
-    @PostMapping(value = "/create")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderItem create(@RequestBody OrderItemDTO orderItem){
-        return orderItemsService.create(orderItem);
+    public OrderItemResponse create(@RequestBody OrderItemRequest orderItem){
+        return OrderItemMapper.toDTO(orderItemsService.create(orderItem));
     }
+
+
 }

@@ -1,6 +1,8 @@
 package br.com.devsdofuturobr.customer.controllers;
 
-import br.com.devsdofuturobr.customer.entities.Customer;
+import br.com.devsdofuturobr.customer.dto.request.CustomerRequest;
+import br.com.devsdofuturobr.customer.dto.response.CustomerCompleteResponse;
+import br.com.devsdofuturobr.customer.mappers.CustomerMapper;
 import br.com.devsdofuturobr.customer.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,11 +15,9 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @PostMapping(value = "/create")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer create(@RequestBody Customer customer){
-        return customerService.create(customer);
+    public CustomerCompleteResponse create(@RequestBody CustomerRequest customer){
+        return CustomerMapper.toCompleteDTO(customerService.create(customer));
     }
-
-
 }

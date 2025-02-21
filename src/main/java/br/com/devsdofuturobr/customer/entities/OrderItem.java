@@ -37,13 +37,14 @@ public class OrderItem {
     @ManyToOne
     @MapsId("productId")  // Mapeia apenas o prod_id
     @JoinColumn(name = "prod_id", nullable = false, insertable = false, updatable = false)
-    @JsonBackReference
     private Product product;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @Column(name = "item_price", nullable = false, precision = 10, scale = 2)
-    @JsonBackReference
     private BigDecimal itemPrice;
+
+    @Column(name = "item_price_total", nullable = false, precision = 10, scale = 2)
+    private BigDecimal itemPriceTotal;
 }
