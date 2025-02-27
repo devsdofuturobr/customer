@@ -2,7 +2,6 @@ package br.com.devsdofuturobr.customer.controllers;
 
 import br.com.devsdofuturobr.customer.dto.request.OrderItemRequest;
 import br.com.devsdofuturobr.customer.dto.response.OrderItemResponse;
-import br.com.devsdofuturobr.customer.entities.OrderItem;
 import br.com.devsdofuturobr.customer.mappers.OrderItemMapper;
 import br.com.devsdofuturobr.customer.services.OrderItemsService;
 import lombok.RequiredArgsConstructor;

@@ -29,4 +29,8 @@ public class ProductMapper {
     public static PagedModel<ProductCompleteResponse> toPagedModel(Page<Product> products){
         return new PagedModel<>(products.map(ProductMapper::toCompleteDTO));
     }
+
+    public static Page<ProductCompleteResponse> toPage(Page<Product> all) {
+        return all.map(ProductMapper::toCompleteDTO);
+    }
 }

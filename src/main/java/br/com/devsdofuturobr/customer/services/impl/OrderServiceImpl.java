@@ -40,4 +40,9 @@ public class OrderServiceImpl implements OrderService {
     public Order findById(Integer id) {
         return orderRepository.findById(id).orElseThrow(OrderNotFoundException::new);
     }
+
+    @Override
+    public Page<Order> findAllByCustomerId(Integer customerId, Pageable pageable) {
+        return orderRepository.findAllByCustomerId(customerId, pageable);
+    }
 }
