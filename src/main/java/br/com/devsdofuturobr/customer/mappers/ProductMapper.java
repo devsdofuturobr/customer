@@ -6,9 +6,6 @@ import br.com.devsdofuturobr.customer.entities.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedModel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ProductMapper {
     public static ProductShortResponse toShortDTO(Product product) {
         return new ProductShortResponse(

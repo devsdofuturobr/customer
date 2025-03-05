@@ -1,5 +1,6 @@
 package br.com.devsdofuturobr.customer.controllers;
 
+import br.com.devsdofuturobr.customer.dto.request.OrderFilter;
 import br.com.devsdofuturobr.customer.dto.response.OrderResponse;
 import br.com.devsdofuturobr.customer.entities.Order;
 import br.com.devsdofuturobr.customer.mappers.OrderMapper;
@@ -32,23 +33,10 @@ public class OrderController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<OrderResponse> findAll(
-            @RequestParam(value = "customerId", required = false) Integer customerId,
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "5") Integer size,
-            @RequestParam(value = "sort", defaultValue = "orderDate") String sort,
-            @RequestParam(value = "direction", defaultValue = "desc") String direction){
-        if(size <= 0) {
-            throw new IllegalArgumentException("Size cannot be less than or equal to zero.");
-        }
-        if(!isValidSortField(sort)) {
-            sort = "orderDate";
-        }
+    public Page<OrderResponse> findAll(OrderFilter filter, Pageable pageable){
 
-        Sort.Direction setDirection = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.DESC);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(setDirection, sort));
-        if(Objects.nonNull(customerId)){
-            return OrderMapper.toPage(orderService.findAllByCustomerId(customerId, pageable));
+        if(Objects.nonNull(filter.customerId())){
+            return OrderMapper.toPage(orderService.findAllByCustomerId(filter.customerId(), pageable));
         }
         return OrderMapper.toPage(orderService.findAll(pageable));
     }
@@ -60,9 +48,4 @@ public class OrderController {
         return OrderMapper.toDTO(orderService.findById(id));
     }
 
-    private static boolean isValidSortField(String sort) {
-        return Arrays.stream(Order.class.getDeclaredFields())
-                .map(Field::getName)
-                .anyMatch(nameField -> nameField.equalsIgnoreCase(sort));
-    }
 }

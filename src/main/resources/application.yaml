@@ -3,7 +3,6 @@ spring:
     url: jdbc:mysql://localhost:33070/customer_db?useTimezone=true&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: bp1234
-
   jpa:
     hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
     hibernate.ddl-auto: none

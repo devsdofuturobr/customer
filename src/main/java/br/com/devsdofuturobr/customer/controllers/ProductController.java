@@ -33,19 +33,7 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<ProductCompleteResponse> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                 @RequestParam(value = "size", defaultValue = "5") Integer size,
-                                                 @RequestParam(value = "sort", defaultValue = "name") String sort,
-                                                 @RequestParam(value = "direction", defaultValue = "desc") String direction){
-        if(size <= 0) {
-            throw new IllegalArgumentException("Size cannot be less than or equal to zero.");
-        }
-        if(!isValidSortField(sort)) {
-            sort = "name";
-        }
-
-        Sort.Direction setDirection = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.DESC);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(setDirection, sort));
+    public Page<ProductCompleteResponse> findAll(Pageable pageable){
         return ProductMapper.toPage(productService.findAll(pageable));
     }
 
@@ -53,11 +41,5 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public ProductCompleteResponse findById(@PathVariable(value = "id") Integer id){
         return ProductMapper.toCompleteDTO(productService.findById(id));
-    }
-
-    private static boolean isValidSortField(String sort) {
-        return Arrays.stream(Order.class.getDeclaredFields())
-                .map(Field::getName)
-                .anyMatch(nameField -> nameField.equalsIgnoreCase(sort));
     }
 }
