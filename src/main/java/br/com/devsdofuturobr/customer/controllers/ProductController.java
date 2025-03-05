@@ -1,5 +1,7 @@
 package br.com.devsdofuturobr.customer.controllers;
 
+import br.com.devsdofuturobr.customer.dto.request.ProductRequest;
+import br.com.devsdofuturobr.customer.dto.request.ProductUpdateRequest;
 import br.com.devsdofuturobr.customer.dto.response.ProductCompleteResponse;
 import br.com.devsdofuturobr.customer.entities.Order;
 import br.com.devsdofuturobr.customer.entities.Product;
@@ -27,7 +29,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductCompleteResponse create(@RequestBody Product product){
+    public ProductCompleteResponse create(@RequestBody ProductRequest product){
         return ProductMapper.toCompleteDTO(productService.create(product));
     }
 
@@ -42,4 +44,17 @@ public class ProductController {
     public ProductCompleteResponse findById(@PathVariable(value = "id") Integer id){
         return ProductMapper.toCompleteDTO(productService.findById(id));
     }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ProductCompleteResponse update(@RequestBody ProductUpdateRequest product){
+        return ProductMapper.toCompleteDTO(productService.update(product));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable(value = "id") Integer id){
+        productService.delete(id);
+    }
+
 }

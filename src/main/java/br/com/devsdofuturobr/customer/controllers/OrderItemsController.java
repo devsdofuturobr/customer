@@ -1,10 +1,13 @@
 package br.com.devsdofuturobr.customer.controllers;
 
+import br.com.devsdofuturobr.customer.dto.request.OrderItemFilter;
 import br.com.devsdofuturobr.customer.dto.request.OrderItemRequest;
 import br.com.devsdofuturobr.customer.dto.response.OrderItemResponse;
 import br.com.devsdofuturobr.customer.mappers.OrderItemMapper;
 import br.com.devsdofuturobr.customer.services.OrderItemsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,5 +24,22 @@ public class OrderItemsController {
         return OrderItemMapper.toDTO(orderItemsService.create(orderItem));
     }
 
+    @GetMapping(value = "/")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderItemResponse findById(OrderItemFilter filter){
+        System.out.println(filter.orderId());
+        return OrderItemMapper.toDTO(orderItemsService.findById(filter));
+    }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Page<OrderItemResponse> findAll(Pageable pageable){
+        return OrderItemMapper.toPage(orderItemsService.findAll(pageable));
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(OrderItemFilter filter){
+        orderItemsService.delete(filter);
+    }
 }
