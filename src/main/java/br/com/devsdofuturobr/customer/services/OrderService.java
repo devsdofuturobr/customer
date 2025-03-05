@@ -12,4 +12,6 @@ public interface OrderService {
     Order findById(Integer id);
 
     Page<Order> findAllByCustomerId(Integer customerId, Pageable pageable);
+
+    void delete(Integer id);
 }

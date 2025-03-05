@@ -2,20 +2,14 @@ package br.com.devsdofuturobr.customer.controllers;
 
 import br.com.devsdofuturobr.customer.dto.request.OrderFilter;
 import br.com.devsdofuturobr.customer.dto.response.OrderResponse;
-import br.com.devsdofuturobr.customer.entities.Order;
 import br.com.devsdofuturobr.customer.mappers.OrderMapper;
 import br.com.devsdofuturobr.customer.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -46,6 +40,12 @@ public class OrderController {
     @ResponseStatus(HttpStatus.OK)
     public OrderResponse findById(@PathVariable(value = "id") Integer id){
         return OrderMapper.toDTO(orderService.findById(id));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable(value = "id") Integer id){
+        orderService.delete(id);
     }
 
 }

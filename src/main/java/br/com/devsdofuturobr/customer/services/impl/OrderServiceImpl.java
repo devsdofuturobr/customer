@@ -45,4 +45,12 @@ public class OrderServiceImpl implements OrderService {
     public Page<Order> findAllByCustomerId(Integer customerId, Pageable pageable) {
         return orderRepository.findAllByCustomerId(customerId, pageable);
     }
+
+    @Override
+    public void delete(Integer id) {
+        if(!orderRepository.existsById(id)){
+            throw new OrderNotFoundException();
+        }
+        orderRepository.deleteById(id);
+    }
 }
