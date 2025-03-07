@@ -2,6 +2,7 @@ package br.com.devsdofuturobr.customer.controllers;
 
 import br.com.devsdofuturobr.customer.dto.request.OrderFilter;
 import br.com.devsdofuturobr.customer.dto.response.OrderResponse;
+import br.com.devsdofuturobr.customer.entities.Order;
 import br.com.devsdofuturobr.customer.mappers.OrderMapper;
 import br.com.devsdofuturobr.customer.services.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -22,24 +23,23 @@ public class OrderController {
     @PostMapping(value = "/{customerId}")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderResponse create(@PathVariable(value = "customerId") Integer customerId){
-        return OrderMapper.toDTO(orderService.create(customerId));
+        Order order = orderService.create(customerId);
+        return OrderMapper.toDTO(order);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<OrderResponse> findAll(OrderFilter filter, Pageable pageable){
-
-        if(Objects.nonNull(filter.customerId())){
-            return OrderMapper.toPage(orderService.findAllByCustomerId(filter.customerId(), pageable));
-        }
-        return OrderMapper.toPage(orderService.findAll(pageable));
+        Page<Order> all = orderService.findAll(pageable, filter);
+        return OrderMapper.toPage(all);
     }
 
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public OrderResponse findById(@PathVariable(value = "id") Integer id){
-        return OrderMapper.toDTO(orderService.findById(id));
+        Order order = orderService.findById(id);
+        return OrderMapper.toDTO(order);
     }
 
     @DeleteMapping(value = "/{id}")

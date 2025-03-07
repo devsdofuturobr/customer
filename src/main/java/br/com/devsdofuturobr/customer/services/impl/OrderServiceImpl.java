@@ -1,5 +1,6 @@
 package br.com.devsdofuturobr.customer.services.impl;
 
+import br.com.devsdofuturobr.customer.dto.request.OrderFilter;
 import br.com.devsdofuturobr.customer.entities.Order;
 import br.com.devsdofuturobr.customer.exception.OrderNotFoundException;
 import br.com.devsdofuturobr.customer.repositories.OrderRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
 
@@ -32,8 +34,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Order> findAll(Pageable pageable) {
-        return orderRepository.findAll(pageable);
+    public Page<Order> findAll(Pageable pageable, OrderFilter filter) {
+        if(ObjectUtils.isEmpty(filter) || ObjectUtils.isEmpty(filter.customerId())){
+            return orderRepository.findAll(pageable);
+        }
+        return orderRepository.findAllByCustomerId(filter.customerId(), pageable);
     }
 
     @Override
@@ -42,15 +47,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Order> findAllByCustomerId(Integer customerId, Pageable pageable) {
-        return orderRepository.findAllByCustomerId(customerId, pageable);
-    }
-
-    @Override
     public void delete(Integer id) {
-        if(!orderRepository.existsById(id)){
-            throw new OrderNotFoundException();
+        if(orderRepository.existsById(id)){
+            orderRepository.deleteById(id);
         }
-        orderRepository.deleteById(id);
+        throw new OrderNotFoundException();
     }
 }

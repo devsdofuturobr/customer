@@ -32,7 +32,6 @@ public class OrderItemsServiceImpl implements OrderItemsService {
     @Override
     public OrderItem create(OrderItemRequest orderItemDTO){
 
-
         validationOrderItemDtoIsNull(orderItemDTO);
         validationOrderItemDtoInvalidQuantity(orderItemDTO);
 
@@ -45,7 +44,7 @@ public class OrderItemsServiceImpl implements OrderItemsService {
             throw new OrderItemIdAlreadyExistsException();
         }
 
-        var orderItem = OrderItemMapper.toCreateByDTO(orderItemDTO, order, product, orderItemId);
+        OrderItem orderItem = OrderItemMapper.toCreateByDTO(orderItemDTO, order, product, orderItemId);
         return orderItemRepository.save(orderItem);
     }
 
