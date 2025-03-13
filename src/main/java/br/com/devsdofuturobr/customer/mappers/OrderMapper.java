@@ -22,4 +22,8 @@ public class OrderMapper {
     public static PagedModel<OrderResponse> toPagedModel(Page<Order> orders){
         return new PagedModel<>(orders.map(OrderMapper::toDTO));
     }
+
+    public static Page<OrderResponse> toPage(Page<Order> all) {
+        return all.map(OrderMapper::toDTO);
+    }
 }

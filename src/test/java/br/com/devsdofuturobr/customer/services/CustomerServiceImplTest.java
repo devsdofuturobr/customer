@@ -3,6 +3,7 @@ package br.com.devsdofuturobr.customer.services;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import br.com.devsdofuturobr.customer.builder.CustomerBuilder;
 import br.com.devsdofuturobr.customer.dto.request.CustomerRequest;
 import br.com.devsdofuturobr.customer.dto.response.CustomerCompleteResponse;
 import br.com.devsdofuturobr.customer.entities.Customer;
@@ -30,20 +31,29 @@ class CustomerServiceImplTest {
 
     @Test
     void shouldSaveCustomerSuccessfully(){
-        var customerDTO = buildDTOCustomer();
-        var customerEntity = buildEntityCustomer();
+        var customerDTO = CustomerBuilder.customerRequestBuild();
+        var customerEntity = CustomerBuilder.customerBuild();
         when(customerRepository.save(any(Customer.class))).thenReturn(customerEntity);
 
         var savedCustomer = customerService.create(customerDTO);
 
         assertNotNull(savedCustomer);
+        assertEquals(1, savedCustomer.getId());
         assertEquals("John Doe", savedCustomer.getName());
+        assertEquals("john.doe@example.com", savedCustomer.getEmail());
+        assertEquals("+1 555-1234", savedCustomer.getContact());
+        assertEquals("123 Main Street", savedCustomer.getAddress());
+        assertEquals("Los Angeles", savedCustomer.getCity());
+        assertEquals("CA", savedCustomer.getState());
+        assertEquals("90001", savedCustomer.getZip());
+        assertEquals("USA", savedCustomer.getCountry());
+
         verify(customerRepository, times(1)).save(any(Customer.class));
     }
 
     @Test
     void shouldNotSaveCustomerIfEmailAlreadyExists(){
-        var customerDTO = buildDTOCustomer();
+        CustomerRequest customerDTO = CustomerBuilder.customerRequestBuild();
 
         when(customerRepository.existsByEmail(anyString())).thenReturn(true);
         assertThrows(EmailAlreadyExistsException.class, () -> customerService.create(customerDTO));
@@ -73,29 +83,5 @@ class CustomerServiceImplTest {
 
     }
 
-    private CustomerRequest buildDTOCustomer(){
-        return new CustomerRequest(
-                "John Doe",
-                "123 Main Street",
-                "Los Angeles",
-                "CA",
-                "90001",
-                "USA",
-                "+1 555-1234",
-                "john.doe@example.com"
-        );
-    }
-    private Customer buildEntityCustomer(){
 
-        return Customer.builder()
-                .name("John Doe")
-                .email("john.doe@example.com")
-                .contact("+1 555-1234")
-                .address("123 Main Street")
-                .city("Los Angeles")
-                .state("CA")
-                .zip("90001")
-                .country("USA")
-                .build();
-    }
 }

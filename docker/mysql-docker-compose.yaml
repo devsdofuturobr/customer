@@ -1,6 +1,7 @@
 services:
   customer_db:
     image: mysql:8.0.31
+    container_name: customer_db
     volumes:
       - dbbase_customer:/var/lib/mysql
     ports:

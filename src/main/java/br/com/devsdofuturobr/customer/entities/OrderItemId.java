@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class OrderItemId implements Serializable {
 
     @Column(name = "order_id")
@@ -21,4 +22,6 @@ public class OrderItemId implements Serializable {
 
     @Column(name = "prod_id")
     private Integer productId;  // Adicionar para refletir a chave estrangeira corretamente
+
+
 }
