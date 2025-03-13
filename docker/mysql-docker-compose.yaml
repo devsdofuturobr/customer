@@ -1,8 +1,8 @@
 services:
-  db:
+  customer_db:
     image: mysql:8.0.31
     volumes:
-      - dbbase:/var/lib/mysql
+      - dbbase_customer:/var/lib/mysql
     ports:
       - "33070:3306"
     environment:
@@ -11,4 +11,4 @@ services:
 
 
 volumes:
-  dbbase:
+  dbbase_customer:

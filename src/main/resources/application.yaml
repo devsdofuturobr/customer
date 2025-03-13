@@ -1,7 +1,6 @@
 spring:
-
   datasource:
-    url: jdbc:mysql://localhost:33070/customer_db?useTimezone=true&serverTimezone=UTC&createDatabaseIfNotExist=true
+    url: jdbc:mysql://customer_db:3306/customer_db?useTimezone=true&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: bp1234
 
@@ -15,3 +14,6 @@ spring:
 
   flyway:
     enabled: true
+
+server:
+  port: 80

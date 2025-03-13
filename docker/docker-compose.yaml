@@ -1,0 +1,8 @@
+services:
+  customer:
+    build:
+      context: ..
+    image: washington1995luiz/customer:0.0.1
+    ports:
+      - "8086:80"
+
