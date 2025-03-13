@@ -1,6 +1,7 @@
 package br.com.devsdofuturobr.customer.services.impl;
 
 import br.com.devsdofuturobr.customer.dto.request.OrderFilter;
+import br.com.devsdofuturobr.customer.entities.Customer;
 import br.com.devsdofuturobr.customer.entities.Order;
 import br.com.devsdofuturobr.customer.exception.OrderNotFoundException;
 import br.com.devsdofuturobr.customer.repositories.OrderRepository;
@@ -23,13 +24,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order create(Integer customerId) {
-        var customer = customerService.findById(customerId);
+        Customer customer = customerService.findById(customerId);
 
-        LocalDate localDate = LocalDate.now();
-        Order order = new Order();
-        order.setCustomer(customer);
-        order.setOrderItems(null);
-        order.setOrderDate(localDate);
+        Order order = Order.builder()
+                .customer(customer)
+                .orderDate(LocalDate.now())
+                .build();
+
         return orderRepository.save(order);
     }
 
