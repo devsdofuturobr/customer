@@ -3,6 +3,7 @@ package br.com.devsdofuturobr.customer.services.impl;
 import br.com.devsdofuturobr.customer.dto.request.CustomerRequest;
 import br.com.devsdofuturobr.customer.dto.response.CustomerCompleteResponse;
 import br.com.devsdofuturobr.customer.entities.Customer;
+import br.com.devsdofuturobr.customer.events.custom.CustomerCreatedEvent;
 import br.com.devsdofuturobr.customer.exception.CustomerNotExistsException;
 import br.com.devsdofuturobr.customer.exception.CustomerRequestException;
 import br.com.devsdofuturobr.customer.exception.EmailAlreadyExistsException;
@@ -11,6 +12,7 @@ import br.com.devsdofuturobr.customer.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -19,14 +21,8 @@ import java.util.Objects;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    @Value("${rabbitmq.exchange.name}")
-    private String exchangeCustomerName;
-
-    @Value("${rabbitmq.routing.key}")
-    private String routingCustomerKey;
-
     private final CustomerRepository customerRepository;
-    private final RabbitTemplate rabbitTemplate;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public Customer create(CustomerRequest customer) {
@@ -44,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .state(customer.state())
                 .zip(customer.zip()).build();
         customerRepository.save(newCustomer);
-        rabbitTemplate.convertAndSend(exchangeCustomerName, routingCustomerKey, newCustomer);
+        eventPublisher.publishEvent(new CustomerCreatedEvent(newCustomer));
         return newCustomer;
     }
 
