@@ -23,7 +23,7 @@ spring:
     enabled: ${FLYWAY_ENABLED:true}
 
 server:
-  port: ${SERVER_PORT:8086}
+  port: ${SERVER_PORT:9002}
 
 rabbitmq:
   queue:
