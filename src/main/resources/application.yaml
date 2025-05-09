@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:33070}/${DB_DATABASE:customer_db}?useTimezone=true&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:33090}/${DB_DATABASE:customer_db}?useTimezone=true&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:bp1234}
 
@@ -24,6 +24,10 @@ spring:
 
 server:
   port: ${SERVER_PORT:9002}
+
+jwt:
+  public:
+    key: ${JWT_PUBLIC_KEY:classpath:app.pub}
 
 rabbitmq:
   queue:
